@@ -1,11 +1,27 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common'
+import { Express } from 'express'
 import { ApiTags } from '@nestjs/swagger'
+import { FileInterceptor } from '@nestjs/platform-express'
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipe,
+  FileTypeValidator,
+  MaxFileSizeValidator
+} from '@nestjs/common'
+
 import { MongoIdPipe } from 'src/common/mongo-id/mongo-id.pipe'
+import { ProductsService } from 'src/products/services/products/products.service'
 import {
   CreateProductDto,
   UpdateProductDto
 } from 'src/products/dtos/products.dto'
-import { ProductsService } from 'src/products/services/products/products.service'
 
 @ApiTags('products')
 @Controller('products')
@@ -22,8 +38,24 @@ export class ProductsController {
   }
 
   @Post()
-  createProduct(@Body() body: CreateProductDto) {
-    return this.productsService.create(body)
+  @UseInterceptors(FileInterceptor('image'))
+  createProduct(
+    @Body() body: any,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 500000 }),
+          new FileTypeValidator({ fileType: 'image/*' })
+        ]
+      })
+    )
+    image: Express.Multer.File
+  ) {
+    // return this.productsService.create(body)
+    return {
+      body,
+      image
+    }
   }
 
   @Put(':id')
