@@ -7,6 +7,8 @@ import { AppService } from './app.service'
 import { AppController } from './app.controller'
 import { ProductsModule } from './products/products.module'
 import { DatabaseModule } from './database/database.module'
+import { ImagesService } from './images/images.service'
+import { ImagesModule } from './images/images.module'
 
 @Module({
   imports: [
@@ -19,13 +21,17 @@ import { DatabaseModule } from './database/database.module'
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.number().required(),
         DB_USER: Joi.string().required(),
-        DB_PASS: Joi.string().required()
+        DB_PASS: Joi.string().required(),
+        CLOUDINARY_CLOUD_NAME: Joi.string().required(),
+        CLOUDINARY_API_KEY: Joi.string().required(),
+        CLOUDINARY_API_SECRET: Joi.string().required()
       })
     }),
     ProductsModule,
-    DatabaseModule
+    DatabaseModule,
+    ImagesModule
   ],
   controllers: [AppController],
-  providers: [AppService]
+  providers: [AppService, ImagesService]
 })
 export class AppModule {}

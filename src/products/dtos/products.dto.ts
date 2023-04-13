@@ -1,3 +1,5 @@
+import { Type } from 'class-transformer'
+import { PartialType } from '@nestjs/swagger'
 import {
   IsString,
   IsNotEmpty,
@@ -7,8 +9,6 @@ import {
   IsPositive,
   IsMongoId
 } from 'class-validator'
-import { Type } from 'class-transformer'
-import { PartialType } from '@nestjs/swagger'
 
 export class CreateProductDto {
   @IsString()
@@ -41,6 +41,9 @@ export class CreateProductDto {
   @IsMongoId()
   @IsNotEmpty()
   readonly brand: string
+
+  @IsNotEmpty()
+  readonly image: Express.Multer.File // TODO: Find a way to validate this
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}

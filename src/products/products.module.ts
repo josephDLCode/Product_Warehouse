@@ -10,6 +10,7 @@ import { BrandsController } from './controllers/brands/brands.controller'
 import { CategoriesService } from './services/categories/categories.service'
 import { ProductsController } from './controllers/products/products.controller'
 import { CategoriesController } from './controllers/categories/categories.controller'
+import { ImagesModule } from 'src/images/images.module'
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { CategoriesController } from './controllers/categories/categories.contro
       { name: Product.name, schema: ProductSchema },
       { name: Category.name, schema: CategorySchema },
       { name: Brand.name, schema: BrandSchema }
-    ])
+    ]),
+    ImagesModule
   ],
   controllers: [ProductsController, CategoriesController, BrandsController],
   providers: [ProductsService, CategoriesService, BrandsService]

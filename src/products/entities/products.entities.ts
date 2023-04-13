@@ -20,6 +20,12 @@ export class Product extends Document {
   @Prop({ type: Number, required: true, default: 0 })
   stock: number
 
+  @Prop({
+    type: { url: { type: String }, public_id: { type: String } },
+    required: true
+  })
+  image: { url: string; public_id: string }
+
   @Prop({ type: Types.ObjectId, ref: Category.name })
   category: Category | Types.ObjectId
 

@@ -51,19 +51,20 @@ export class ProductsController {
     )
     image: Express.Multer.File
   ) {
-    // return this.productsService.create(body)
-    return {
-      body,
-      image
-    }
+    return this.productsService.create(body, image)
   }
 
   @Put(':id')
   updateProduct(
     @Param('id', MongoIdPipe) id: string,
-    @Body() changes: UpdateProductDto
+    @Body() changes: UpdateProductDto,
+    @UploadedFile() image: Express.Multer.File
   ) {
-    return this.productsService.update(id, changes)
+    /* return this.productsService.update(id, changes, image) */
+    console.log('ID: ', id)
+    console.log('Changes: ', changes)
+    console.log('Image: ', image)
+    return 'updateProduct'
   }
 
   @Delete(':id')
