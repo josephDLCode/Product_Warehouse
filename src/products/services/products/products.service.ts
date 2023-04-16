@@ -50,29 +50,34 @@ export class ProductsService {
       })
   }
 
-  update(id: string, changes: UpdateProductDto, image: Express.Multer.File) {
-    const product = this.productModel
-      .findByIdAndUpdate(id, { $set: changes }, { new: true })
-      .exec()
-    if (!product) throw new NotFoundException(`Product #${id} not found`)
-    product.then((product) => {
-      if (image) {
-        this.imagesService
-          .uploadImage(image)
-          .then((result) => {
-            product.image.url = result.url
-            product.image.public_id = result.public_id
-            product.save()
-          })
-          .catch((error) => {
-            throw new BadRequestException(error)
-          })
+  async update(
+    id: string,
+    changes: UpdateProductDto,
+    image: Express.Multer.File
+  ) {
+    const product = await this.findOne(id)
+    const newChanges: any = { ...changes }
+    if (image) {
+      const updatedImg = await this.imagesService.updateImage(
+        product.image.public_id,
+        image
+      )
+      newChanges.image = {
+        url: updatedImg.url,
+        public_id: updatedImg.public_id
       }
-    })
-    return product
+    }
+    const updatedProduct = await this.productModel.findByIdAndUpdate(
+      id,
+      { $set: newChanges },
+      { new: true }
+    )
+    return updatedProduct
   }
 
-  remove(id: string) {
+  async remove(id: string) {
+    const product = await this.findOne(id)
+    await this.imagesService.deleteImage(product.image.public_id)
     return this.productModel.findByIdAndDelete(id)
   }
 }

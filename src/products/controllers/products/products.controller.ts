@@ -55,16 +55,22 @@ export class ProductsController {
   }
 
   @Put(':id')
+  @UseInterceptors(FileInterceptor('image'))
   updateProduct(
     @Param('id', MongoIdPipe) id: string,
     @Body() changes: UpdateProductDto,
-    @UploadedFile() image: Express.Multer.File
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 500000 }),
+          new FileTypeValidator({ fileType: 'image/*' })
+        ],
+        fileIsRequired: false
+      })
+    )
+    image: Express.Multer.File
   ) {
-    /* return this.productsService.update(id, changes, image) */
-    console.log('ID: ', id)
-    console.log('Changes: ', changes)
-    console.log('Image: ', image)
-    return 'updateProduct'
+    return this.productsService.update(id, changes, image)
   }
 
   @Delete(':id')
