@@ -7,5 +7,6 @@ export default registerAs('database', () => ({
     dbport: process.env.DB_PORT,
     dbuser: process.env.DB_USER,
     dbpass: process.env.DB_PASS
-  }
+  },
+  jwtSecret: process.env.JWT_SECRET
 }))

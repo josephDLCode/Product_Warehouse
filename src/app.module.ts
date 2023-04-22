@@ -9,6 +9,8 @@ import { ProductsModule } from './products/products.module'
 import { DatabaseModule } from './database/database.module'
 import { ImagesService } from './images/images.service'
 import { ImagesModule } from './images/images.module'
+import { AuthModule } from './auth/auth.module'
+import { UsersModule } from './users/users.module'
 
 @Module({
   imports: [
@@ -17,6 +19,7 @@ import { ImagesModule } from './images/images.module'
       load: [config],
       isGlobal: true,
       validationSchema: Joi.object({
+        JWT_SECRET: Joi.string().required(),
         DB_NAME: Joi.string().required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.number().required(),
@@ -29,7 +32,9 @@ import { ImagesModule } from './images/images.module'
     }),
     ProductsModule,
     DatabaseModule,
-    ImagesModule
+    ImagesModule,
+    AuthModule,
+    UsersModule
   ],
   controllers: [AppController],
   providers: [AppService, ImagesService]

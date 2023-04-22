@@ -1,0 +1,5 @@
+export enum DocumentType {
+  DNI = 'DNI',
+  CARNET_DE_EXTRANJERIA = 'CARNET DE EXTRANJERIA',
+  PASAPORTE = 'PASAPORTE'
+}
